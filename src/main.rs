@@ -12,7 +12,6 @@ fn main_component() -> Html {
 
     html! {
         <div>
-            <h1>{ "Main Component" }</h1>
             <KeyInput />
             <ResultTable data={pick_histories} />
         </div>
