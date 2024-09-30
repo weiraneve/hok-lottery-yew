@@ -1,10 +1,6 @@
 use yew::prelude::*;
 use yew_router::prelude::*;
-
-mod key_input;
-mod result_table;
-
-use key_input::KeyInput;
+use crate::key_input::KeyInput;
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {

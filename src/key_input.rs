@@ -1,16 +1,15 @@
 use yew::prelude::*;
 use wasm_bindgen_futures::spawn_local;
-use wasm_bindgen::JsCast;
 use web_sys::{HtmlInputElement, KeyboardEvent};
 use gloo_net::http::Request;
 use serde::{Deserialize, Serialize};
 
-use crate::result_table::ResultTable;
+use crate::result_table::{ResultTable, PickHistory};
 
-const BASE_URL: &str = "http://localhost:8080"; // Replace with your actual base URL
+const BASE_URL: &str = "http://localhost:8080";
 
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
-struct PickHistory {
+struct ApiPickHistory {
     time: String,
     pick_group: String,
 }
@@ -18,7 +17,7 @@ struct PickHistory {
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
 struct ApiResponse {
     data: String,
-    logs: Vec<PickHistory>,
+    logs: Vec<ApiPickHistory>,
 }
 
 #[function_component(KeyInput)]
@@ -47,7 +46,7 @@ pub fn key_input() -> Html {
             let pick_histories = pick_histories.clone();
 
             spawn_local(async move {
-                let payload = serde_json::json!({ "encryptCode": *key_words });
+                let payload = serde_json::json!({ "encryptCode": (*key_words).clone() });
                 match Request::post(BASE_URL)
                     .json(&payload)
                     .unwrap()
@@ -57,7 +56,14 @@ pub fn key_input() -> Html {
                     Ok(response) => {
                         if let Ok(data) = response.json::<ApiResponse>().await {
                             current_pick.set(Some(data.data));
-                            pick_histories.set(data.logs);
+                            let converted_logs: Vec<PickHistory> = data.logs
+                                .into_iter()
+                                .map(|log| PickHistory {
+                                    time: log.time,
+                                    pick_group: log.pick_group,
+                                })
+                                .collect();
+                            pick_histories.set(converted_logs);
                         }
                     }
                     Err(err) => {
@@ -96,12 +102,12 @@ pub fn key_input() -> Html {
                     <div class="keyword-container">
                         <input
                             class="keyword-input"
-                            onchange={on_text_input}
+                            oninput={on_text_input}
                             value={(*key_words).clone()}
                             ref={input_ref}
                             onkeyup={on_key_up}
                         />
-                        <button class="confirm-button" onclick={handle_click}>{"生成英雄"}</button>
+                        <button class="confirm-button" onclick={Callback::from(move |_: MouseEvent| handle_click.emit(()))}>{"生成英雄"}</button>
                     </div>
                     if let Some(pick) = &*current_pick {
                         <div class="hint-container">
