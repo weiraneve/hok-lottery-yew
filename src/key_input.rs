@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::result_table::{ResultTable, PickHistory};
 
-const BASE_URL: &str = "http://localhost:8000";
+const BASE_URL: &str = "http://localhost:8034";
 
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
 struct ApiPickHistory {
