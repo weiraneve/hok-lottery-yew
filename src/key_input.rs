@@ -97,25 +97,27 @@ pub fn key_input() -> Html {
 
     html! {
         <div>
-            <div class="selector-container">
-                <div class="input-container">
-                    <div class="keyword-container">
-                        <input
-                            class="keyword-input"
-                            oninput={on_text_input}
-                            value={(*key_words).clone()}
-                            ref={input_ref}
-                            onkeyup={on_key_up}
-                        />
-                        <button class="confirm-button" onclick={Callback::from(move |_: MouseEvent| handle_click.emit(()))}>{"生成英雄"}</button>
-                    </div>
-                    if let Some(pick) = &*current_pick {
-                        <div class="hint-container">
-                            <div class="backdrop"></div>
-                            <p>{pick}</p>
+            <div class="background-container">
+                <div class="selector-container">
+                    <div class="input-container">
+                        <div class="keyword-container">
+                            <input
+                                class="keyword-input"
+                                oninput={on_text_input}
+                                value={(*key_words).clone()}
+                                ref={input_ref}
+                                onkeyup={on_key_up}
+                            />
+                            <button class="confirm-button" onclick={Callback::from(move |_: MouseEvent| handle_click.emit(()))}>{"生成英雄"}</button>
                         </div>
-                    }
-                    <ResultTable data={(*pick_histories).clone()} />
+                        if let Some(pick) = &*current_pick {
+                            <div class="hint-container">
+                                <div class="backdrop"></div>
+                                <p>{pick}</p>
+                            </div>
+                        }
+                        <ResultTable data={(*pick_histories).clone()} />
+                    </div>
                 </div>
             </div>
         </div>

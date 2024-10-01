@@ -5,6 +5,17 @@ body {
   box-sizing: border-box;
 }
 
+.background-container {
+  background-image: url("/static/all-hero.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .selector-container {
   max-width: 800px;
   margin: 0 auto;
