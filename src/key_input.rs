@@ -20,7 +20,8 @@ struct ApiResponse {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
 struct LogEntry {
     team_id: i32,
-    pickGroup: String,
+    #[serde(rename = "pickGroup")]
+    pick_group: String,
     time: String,
 }
 
@@ -66,7 +67,7 @@ pub fn key_input() -> Html {
                                     .into_iter()
                                     .map(|log| PickHistory {
                                         time: log.time,
-                                        pickGroup: log.pickGroup,
+                                        pick_group: log.pick_group,
                                     })
                                     .collect();
                                 pick_histories.set(converted_logs);

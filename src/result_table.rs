@@ -10,7 +10,8 @@ pub struct ResultTableProps {
 #[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
 pub struct PickHistory {
     pub time: String,
-    pub pickGroup: String,
+    #[serde(rename = "pickGroup")]
+    pub pick_group: String,
 }
 
 #[function_component(ResultTable)]
@@ -39,7 +40,7 @@ pub fn result_table(props: &ResultTableProps) -> Html {
                             html! {
                                 <tr>
                                     <td class="table-divider">{format_date(&row_data.time)}</td>
-                                    <td class="table-divider">{&row_data.pickGroup}</td>
+                                    <td class="table-divider">{&row_data.pick_group}</td>
                                 </tr>
                             }
                         }).collect::<Html>()}
