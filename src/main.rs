@@ -8,12 +8,10 @@ use crate::result_table::{ResultTable, PickHistory};
 
 #[function_component(Main)]
 fn main_component() -> Html {
-    let pick_histories: Vec<PickHistory> = vec![];
 
     html! {
         <div>
             <KeyInput />
-            <ResultTable data={pick_histories} />
         </div>
     }
 }
