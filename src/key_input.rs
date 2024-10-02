@@ -3,6 +3,7 @@ use wasm_bindgen_futures::spawn_local;
 use web_sys::{HtmlInputElement, KeyboardEvent};
 use gloo_net::http::Request;
 use serde::{Deserialize, Serialize};
+use gloo_console::log;
 
 use crate::result_table::{ResultTable, PickHistory};
 
@@ -66,8 +67,8 @@ pub fn key_input() -> Html {
                             pick_histories.set(converted_logs);
                         }
                     }
-                    Err(err) => {
-                        log::error!("Error: {:?}", err);
+                    Err(_err) => {
+                        log!("Error");
                         current_pick.set(None);
                         pick_histories.set(vec![]);
                     }
