@@ -22,7 +22,6 @@ pub fn result_table(props: &ResultTableProps) -> Html {
 
     if props.data.is_empty() {
         html! {}
-        log::info!("日志系统初始化成功！");
     } else {
         html! {
             <div class="table-container">
