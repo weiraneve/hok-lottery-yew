@@ -1,15 +1,16 @@
 use yew::prelude::*;
 use chrono::{DateTime, Utc};
+use serde::{Serialize, Deserialize};
 
 #[derive(Clone, PartialEq, Properties)]
 pub struct ResultTableProps {
     pub data: Vec<PickHistory>,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
 pub struct PickHistory {
     pub time: String,
-    pub pick_group: String,
+    pub pickGroup: String,
 }
 
 #[function_component(ResultTable)]
@@ -38,7 +39,7 @@ pub fn result_table(props: &ResultTableProps) -> Html {
                             html! {
                                 <tr>
                                     <td class="table-divider">{format_date(&row_data.time)}</td>
-                                    <td class="table-divider">{&row_data.pick_group}</td>
+                                    <td class="table-divider">{&row_data.pickGroup}</td>
                                 </tr>
                             }
                         }).collect::<Html>()}

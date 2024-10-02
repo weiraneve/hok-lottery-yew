@@ -10,15 +10,18 @@ use crate::result_table::{ResultTable, PickHistory};
 const BASE_URL: &str = "http://localhost:8034";
 
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
-struct ApiPickHistory {
+struct ApiResponse {
+    team_id: i32,
+    data: String,
     time: String,
-    pick_group: String,
+    logs: Vec<LogEntry>,
 }
 
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
-struct ApiResponse {
-    data: String,
-    logs: Vec<ApiPickHistory>,
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
+struct LogEntry {
+    team_id: i32,
+    pickGroup: String,
+    time: String,
 }
 
 #[function_component(KeyInput)]
@@ -55,20 +58,26 @@ pub fn key_input() -> Html {
                     .await
                 {
                     Ok(response) => {
-                        if let Ok(data) = response.json::<ApiResponse>().await {
-                            current_pick.set(Some(data.data));
-                            let converted_logs: Vec<PickHistory> = data.logs
-                                .into_iter()
-                                .map(|log| PickHistory {
-                                    time: log.time,
-                                    pick_group: log.pick_group,
-                                })
-                                .collect();
-                            pick_histories.set(converted_logs);
+                        let text = response.text().await.unwrap();
+                        match serde_json::from_str::<ApiResponse>(&text) {
+                            Ok(data) => {
+                                current_pick.set(Some(data.data));
+                                let converted_logs: Vec<PickHistory> = data.logs
+                                    .into_iter()
+                                    .map(|log| PickHistory {
+                                        time: log.time,
+                                        pickGroup: log.pickGroup,
+                                    })
+                                    .collect();
+                                pick_histories.set(converted_logs);
+                            },
+                            Err(err) => {
+                                log!(err.to_string());
+                            }
                         }
                     }
-                    Err(_err) => {
-                        log!("Error");
+                    Err(err) => {
+                        log!(err.to_string());
                         current_pick.set(None);
                         pick_histories.set(vec![]);
                     }
