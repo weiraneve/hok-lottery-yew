@@ -4,7 +4,6 @@ mod result_table;
 use yew::prelude::*;
 use yew::Renderer;
 use crate::key_input::KeyInput;
-use crate::result_table::{ResultTable, PickHistory};
 
 #[function_component(Main)]
 fn main_component() -> Html {
